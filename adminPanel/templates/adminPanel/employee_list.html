@@ -1,0 +1,86 @@
+{% extends "adminPanel/base.html" %}
+{% block content %}
+    <h1>API Data Table</h1>
+
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile Number</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Table rows will be populated dynamically here -->
+        </tbody>
+    </table>
+
+    <div id="pagination">
+        <!-- Pagination links will be added here -->
+    </div>
+
+    <script>
+        // Function to fetch data from API
+        function fetchData(pageNumber = 1) {
+            const url=String({% url 'employee-list' %})+ `?page=${pageNumber}`
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('table-body');
+                tableBody.innerHTML = ''; // Clear existing table rows
+
+                console.log("Data from api", data)
+                var employees = data.employees
+                // Populate table with data
+                employees.forEach(employee => {
+                    const row = `
+                        <tr>
+                            <td>${employee.id}</td>
+                            <td>${employee.name}</td>
+                            <td>${employee.email}</td>
+                            <td>${employee.mobile}</td>
+                            <td>${employee.designation}</td>
+                            <td>${employee.department}</td>
+                            <td>
+                                <button onclick="edit(${employee.id})">Edit</button>
+                                <button onclick="delete_row(${employee.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+
+                // Add pagination links
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = '';
+                for (let i = 1; i <= data.total_pages; i++) {
+                    const link = `<a href="#" onclick="fetchData(${i})">${i}</a>`;
+                    pagination.innerHTML += link;
+                }
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Initial fetch on page load
+        fetchData();
+
+        // Function to handle edit button click
+        function edit(id) {
+            // Add your edit functionality here
+            console.log('Edit button clicked for ID:', id);
+        }
+
+        // Function to handle delete button click
+        function delete_row(id) {
+            // Add your delete functionality here
+            console.log('Delete button clicked for ID:', id);
+        }
+    </script>
+
+{% endblock content %}
+
+<p>Hey there</p>

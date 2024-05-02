@@ -1,0 +1,30 @@
+# Ignore Python bytecode files
+*.pyc
+__pycache__
+
+# Ignore environment-related files
+.env
+
+# Ignore macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+.idea/
+Icon
+
+# Ignore local development settings
+*.sqlite3
+*.db
+*.log
+
+# Ignore staticfiles directory (only if you're using a different method to serve static files)
+staticfiles/
+
+# Ignore media files (user-uploaded content)
+media/
+
+# Ignore virtual environment
+venv/
+
+# Django models
+migrations

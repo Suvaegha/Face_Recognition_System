@@ -1,0 +1,64 @@
+{% extends "employeePanel/base.html" %}
+{% block content %}
+
+<div id="apply-leave" style="display: none">
+        <h3>Request for a Leave</h3>
+        <form id="apply-leave-form">
+            <div class="form-field">
+                <label for="dateInput">Select a date:</label>
+                <input type="date" id="dateInput" name="dateInput">
+            </div>
+            <div class="form-field">
+                <label for="reason">Reason for applying</label>
+                <input type="text" id="reason" name="reason" placeholder="Enter your reason for leave">
+            </div>
+            <div class="form-field">
+                <button type="submit">Apply</button>
+            </div>
+        </form>
+</div>
+    <script>
+
+    document.getElementById('apply-leave-form').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get form data
+            const formData = new FormData(this);
+
+            // Convert form data to JSON object
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = value;
+            });
+
+
+            console.log('Form data',jsonData)
+            // Make HTTP POST request to API endpoint
+            fetch({% url 'post-leave' %}, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Add any other headers as needed
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse response JSON
+            })
+            .then(data => {
+                console.log('Response:', data);
+                // Handle success response
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error
+            });
+    });
+    </script>
+
+{% endblock content %}
+
+<p>Hey there</p>
